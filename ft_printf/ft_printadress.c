@@ -6,17 +6,12 @@
 /*   By: lduflot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 13:57:21 by lduflot           #+#    #+#             */
-/*   Updated: 2024/12/05 15:15:02 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/03/28 10:16:29 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include <stdlib.h>
-
-//Adresse du pointeur =
-// %p
-// prefixe 0x (indique que les valeurs apres sont ecritent en hexadecimal 
-// &
 
 int	ft_print(long long int nb)
 {
@@ -68,12 +63,3 @@ int	ft_printadress(void	*adress)
 	}
 	return (count);
 }
-
-/*#include <stdio.h>
-
-int	main(void)
-{
-	char *test = "ckefz";
-
-	ft_printadress((char *)test);
-}*/

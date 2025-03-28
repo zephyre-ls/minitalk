@@ -6,7 +6,7 @@
 /*   By: lduflot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 13:52:40 by lduflot           #+#    #+#             */
-/*   Updated: 2024/12/05 14:32:14 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/03/28 10:17:24 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,49 +18,9 @@
 //nb - (quotient entier * 16) = reste 
 //ex = 75/16 = 4 ; 75 -(4*16) = 11 = 4B (car b = 11)
 /////////////////////////////////////////////////////////////////////////////
-/**
-	* @brief description de la fontion
-	* @params exemple: nb signifie le nombre donne en parametre
-	* @return example: return an in who's the number of bytes writed.
-	* etc. lolol kiss kiss xoxo 
-	*/
 
 #include "ft_printf.h"
 
-/*long long int	ft_complement2(long long int n);
-
-void	ft_printbinaire(long long int n)
-{
-	if (n > 1)
-	{
-		ft_printbinaire(n / 2);
-	}
-	ft_printhexaminus(n % 2 + '0');
-}
-
-long long int ft_complement2(long long int n)
-{
-	unsigned long long int nb = (long long int)n;
-	
-	if (nb > 1)
-	{
-		ft_complement2(nb / 2);
-	}
-	ft_printchar(nb % 2 + '0');
-
-	if (nb == 0)
-		nb = 1;
-	else if (nb == 1)
-		nb = 0;
-	return (nb);
-}
-
-long long int	ft_addone(long long int n)
-{
-	n = n + 1;
-	return (n);
-}
-*/
 int	ft_printlettre(long long int nb)
 {
 	if (nb == 10)
@@ -105,17 +65,3 @@ int	ft_printhexaminus(int nb)
 	}
 	return (count);
 }
-
-/*#include <stdio.h>
-
-int	main(void)
-{
-	//int test1 = -255;
-	long long int test = -255;
-	int test2 = 255;
-
-	ft_printhexaminus(test);
-	printf("\ntest neg:%llX\n", (long long int)test);
-	printf("test pos:%X\n", test2);
-	return (0);
-}*/

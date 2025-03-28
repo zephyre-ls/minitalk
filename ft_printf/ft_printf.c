@@ -6,7 +6,7 @@
 /*   By: lduflot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 11:22:49 by lduflot           #+#    #+#             */
-/*   Updated: 2024/12/05 14:00:09 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/03/28 10:16:49 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,9 +127,4 @@ type	va_arg(va_list ap, type)
 void	va_copy(va_list dest, va_list src)
 permet de copier les listes d arguments 
 void	va_end(va_list ap);
-signaler qu on a fini de lire la liste d arguments
-
-malloc
-free
-write
-printf (man =  LANG=C man 3 printf )*/
+signaler qu on a fini de lire la liste d arguments*/
