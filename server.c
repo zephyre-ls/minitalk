@@ -1,0 +1,124 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   server.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/28 10:14:28 by lduflot           #+#    #+#             */
+/*   Updated: 2025/04/01 00:47:46 by lduflot          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minitalk.h"
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	* But du serveur :
+	* Reception signaux client;
+	* Traduit les donnes binaires en caractères;
+	* Affiche le messqge reçu
+	* Affichage rapide (time ./client < 1 seconde)
+	* Bonus : Informe le client de la bonne réception
+	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+/*
+ *Structure SIGACTION
+ * sa_handler : ft a exe qd le signal arrive
+ * sa_mask : bloque les signaux temporairement pendant l'exe 
+ * sa_flag : optionnel, modif cpt par defaut du signal =
+ * SA_RESTART(reprendre une fonction interrompue;
+ * SA_SIGINFO(info supplementaire sur le signal);
+*/
+
+//Reception des signaux
+// Signum = numero du signal
+// Ecrire signal non conventionnel car nom de la fonction signal, peut porter a confusion
+
+void	handle_signal(int signum)
+{
+	static char	*string = NULL;
+	static int	size = 0;
+	static unsigned char	current_char = 0; //stock le char bit par bit
+	static int	bit_index = 0; // compte nbr de bit reçu
+	char	*new_string;
+	
+	if (signum == SIGUSR1)
+		current_char = (current_char << 1) | 1;
+	else
+		current_char = (current_char << 1);
+	bit_index++;
+	if (bit_index == 8) 
+	{
+		if (current_char)
+		{
+			string[size] = '\0';
+			ft_printf("%s\n", string);
+			free(string);
+			string = NULL;
+			size = 0;
+		}
+		else
+		{
+			new_string = malloc(size + 2);
+			if (!new_string)
+				return ;
+			if (string)
+			{
+				ft_memcpy(new_string, string, size);
+				free(string);
+			}
+			new_string[size] = current_char;
+			new_string[size + 1] = '\0';
+			string = new_string;
+			size++;
+		}
+		bit_index = 0; 
+		current_char = 0;
+	}
+	else
+		current_char <<=1;
+}
+
+//
+/*void	mask_signal(int signum)
+{
+}*/
+
+
+/*kill PID = quand on quitte le processus avec CTRL + C. 
+
+	difference sleep/usleep
+-temps et sleep renvoie 0 usleep rien
+sleep(seconde) = endort le processus temps donne 
+usleep = (microseconde)*/
+
+
+/*
+	* Le processus possède un id unique = PID
+	* pid_t getpid() = id du processus
+	* pid_t getpgrp() = id groupe de processus
+	* pid_t getppid() = id du père du processus
+*/
+
+/*
+	* struct sigaction (directement dans signal.h);
+	* conventionnement on la defini en sa;
+*/
+
+/*
+	* Utilisation d'une boucle infini pour que le serveur ne se ferme pas"
+*/
+int	main(void)
+{
+	pid_t pid = getpid();
+	ft_printf("PID serveur : %d", pid);
+	struct sigaction sa;
+	sa.sa_handler = handle_signal;
+//	sa.sa_mask = mask_signal;
+	sa.sa_flags = 0;
+	sigaction(SIGUSR1, &sa, NULL);
+	sigaction(SIGUSR2, &sa, NULL);
+	while(1)
+		sleep(1);
+	return(0);
+}
