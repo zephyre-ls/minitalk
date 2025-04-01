@@ -6,7 +6,7 @@
 /*   By: lduflot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 00:11:05 by lduflot           #+#    #+#             */
-/*   Updated: 2025/04/01 09:53:51 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/04/01 12:26:31 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,12 @@ void	translate_ascii_bit(int pid, unsigned char c);
 
 //server
 void	handle_signal(int signum);
+void	add_bit(int signum, unsigned char *current_char, int *bit_index);
+void	add_in_string(unsigned char current_char, int *size, int signum);
 void	free_memory(int signum);
-//void	mask_signal(?);
 
 //utils
 void	*ft_memcpy(void *dest, const void *src, size_t n);
-int	ft_atoi(const char *nptr);
+int		ft_atoi(const char *nptr);
 
 #endif

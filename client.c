@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:13:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/04/01 09:42:49 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/04/01 11:44:54 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 	* Possibilite de renvoyer un message sans relancer serveur.
 	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-
 /*
  * Utilisation de sigaction plutot que signal;
  * Le man le dit pourquoi?
@@ -34,12 +33,15 @@
 
 /*
  * Send_signal;
- *	i = compteur qui va parcourir les 8 bits d'1 octet;
- * Boucle = Decremente pour parcourir les bits du plus significatif au plus faible
- * c >> i = Decalage des bits vers la droite pour amener le bit qu'on veut exa a la pos du bit de poids faible
+ * i = compteur qui va parcourir les 8 bits d'1 octet;
+ * Boucle = Decremente pour parcourir les bits du plus significatif
+ * au plus faible
+ * c >> i = Decalage des bits vers la droite pour amener le bit
+ * a la pos du bit de poids faible
  * %2==0 = savoir si bit de poids faible = 0 ou 1;
  * usleep (choix de usleep car sleep=seconde, usleep=microseconde);
- * usleep permet d'éviter d'envoyer les signaux trop rapidement et permet au serveur de traiter chaque bit sans les oublier.
+ * usleep permet d'éviter d'envoyer les signaux trop rapidement; 
+ * permet au serveur de traiter chaque bit sans les oublier.
  * 420 microseconde = 0,00042seconde (pe trop court);
  */
 
@@ -49,9 +51,9 @@ void	translate_ascii_bit(int pid, unsigned char c)
 	int	bit;
 
 	i = 8;
-	while(i > 0)
+	while (i > 0)
 	{
-		i--; 
+		i--;
 		bit = c >> i & 1;
 		if (bit == 1)
 			kill(pid, SIGUSR1);

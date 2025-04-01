@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:14:28 by lduflot           #+#    #+#             */
-/*   Updated: 2025/04/01 09:57:00 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/04/01 12:26:53 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,54 +32,66 @@
 
 //Reception des signaux
 // Signum = numero du signal
-// Ecrire signal non conventionnel car nom de la fonction signal, peut porter a confusion
+// Ecrire signal non conventionnel car fonction signal existe, 
+// peut porter a confusion
 
 //Current = "actuel" donc = char acnnuel
+// current_char = stock le char bit par bit
+// bit_index = 8 = caractere complet
+// malloc size + 2 = stock current_char et \0
+static char	*g_string = NULL;
 
-static char	*string = NULL;
+// bit_index compteur nbr de bit recu
+// << 1 | 1 = add 1 
+// << 1 = add 0
+void	add_bit(int signum, unsigned char *current_char, int *bit_index)
+{
+	if (signum == SIGUSR1)
+		*current_char = (*current_char << 1) | 1;
+	else
+		*current_char = (*current_char << 1);
+	(*bit_index)++;
+}
+
+void	add_in_string(unsigned char current_char, int *size, int signum)
+{
+	char	*new_string;
+
+	new_string = malloc(*size + 2);
+	if (!new_string)
+		return (free_memory(signum));
+	if (g_string)
+	{
+		ft_memcpy(new_string, g_string, *size);
+		free(g_string);
+	}
+	new_string[*size] = current_char;
+	new_string[*size + 1] = '\0';
+	g_string = new_string;
+	(*size)++;
+}
+
 void	handle_signal(int signum)
 {
-	static int	size = 0;
-	static unsigned char	current_char = 0; //stock le char bit par bit
-	static int	bit_index = 0; // compte nbr de bit reçu
-	char	*new_string;
-	
-	if (signum == SIGUSR1)
-		current_char = (current_char << 1) | 1; //add 1 
-	else
-		current_char = (current_char << 1); // add 0
-	bit_index++;
+	static int			size = 0;
+	static int			bit_index = 0;
+	static unsigned char		current_char = 0;
 
-	//si reception de 8 bits = caractere complet
+	add_bit(signum, &current_char, &bit_index);
 	if (bit_index == 8)
 	{
 		if (current_char == '\0')
 		{
-			ft_printf("%s\n", string);
-			free(string);
-			string = NULL;
+			ft_printf("%s\n", g_string);
+			free(g_string);
+			g_string = NULL;
 			size = 0;
 		}
 		else
 		{
-			new_string = malloc(size + 2); //permet de stock current_char et \0
-			if (!new_string)
-			{
-				free(string);
-				string = NULL;
-				return ;
-			}
-			if (string)
-			{
-				ft_memcpy(new_string, string, size);
-				free(string);
-			}
-			new_string[size] = current_char;
-			new_string[size + 1] = '\0';
-			string = new_string;
-			size++;
+			add_in_string(current_char, &size, signum);
 		}
-		bit_index = 0; 
+		bit_index = 0;
 		current_char = 0;
 	}
 }
@@ -87,27 +99,19 @@ void	handle_signal(int signum)
 void	free_memory(int signum)
 {
 	(void)signum;
-
-	if(string)
+	if (g_string)
 	{
-		free(string);
-		string = NULL;
+		free(g_string);
+		g_string = NULL;
 	}
 	exit (0);
 }
-
-//
-/*void	mask_signal(int signum)
-{
-}*/
-
 
 /* 
 difference sleep/usleep
 -temps et sleep renvoie 0 usleep rien
 sleep(seconde) = endort le processus temps donne 
 usleep = (microseconde)*/
-
 
 /*
 	* Le processus possède un id unique = PID
@@ -126,8 +130,8 @@ usleep = (microseconde)*/
 */
 int	main(void)
 {
-	struct sigaction sa;
-	pid_t pid;
+	struct sigaction	sa;
+	pid_t				pid;
 
 	pid = getpid();
 	ft_printf("PID serveur : %d\n", pid);
@@ -138,7 +142,7 @@ int	main(void)
 	sigaction(SIGUSR2, &sa, NULL);
 	sa.sa_handler = free_memory;
 	sigaction(SIGINT, &sa, NULL);
-	while(1)
+	while (1)
 		pause();
-	return(0);
+	return (0);
 }
