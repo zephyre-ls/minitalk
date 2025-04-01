@@ -6,7 +6,7 @@
 #    By: lduflot <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/23 23:49:38 by lduflot           #+#    #+#              #
-#    Updated: 2025/03/31 22:58:25 by lduflot          ###   ########.fr        #
+#    Updated: 2025/04/01 13:29:02 by lduflot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,11 +36,10 @@ OBJS_CLIENT = $(FILES_CLIENT:.c=.o)
 all: $(FT_PRINTF_LIB) $(NAME_SERVER) $(NAME_CLIENT)
 
 $(FT_PRINTF_LIB):
-	@echo "Compilation de ft_printf..."
 	@make -s -C $(FT_PRINTF_DIR)
 
 $(NAME_CLIENT): $(OBJS_CLIENT)
-	@echo "./client /PID_SERVEUR /txt"
+	@echo "./client [PID_SERVEUR] ["message"]"
 	@$(CC) $(CFLAGS) $(OBJS_CLIENT) $(FT_PRINTF_LIB) -o $(NAME_CLIENT)
 
 $(NAME_SERVER): $(OBJS_SERVER)

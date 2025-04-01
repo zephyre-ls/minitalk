@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:14:28 by lduflot           #+#    #+#             */
-/*   Updated: 2025/04/01 13:24:34 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/04/01 13:57:23 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,34 +16,19 @@
 	* But du serveur :
 	* Reception signaux client;
 	* Traduit les donnes binaires en caractères;
-	* Affiche le messqge reçu
-	* Affichage rapide (time ./client < 1 seconde)
-	* Bonus : Informe le client de la bonne réception
+	* Affiche le messqge reçu;
+	* Affichage rapide (time ./client < 1 seconde);
+	* Variable globale : simplifie ma gestion de mémoire,
+	* evite l'ajout de pointeur de pointeur.
 	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+char	*g_string = NULL;
+
 /*
- *Structure SIGACTION
- * sa_handler : ft a exe qd le signal arrive
- * sa_mask : bloque les signaux temporairement pendant l'exe 
- * sa_flag : optionnel, modif cpt par defaut du signal =
- * SA_RESTART(reprendre une fonction interrompue;
- * SA_SIGINFO(info supplementaire sur le signal);
-*/
-
-//Reception des signaux
-// Signum = numero du signal
-// Ecrire signal non conventionnel car fonction signal existe, 
-// peut porter a confusion
-
-//Current = "actuel" donc = char acnnuel
-// current_char = stock le char bit par bit
-// bit_index = 8 = caractere complet
-// malloc size + 2 = stock current_char et \0
-static char	*g_string = NULL;
-
-// bit_index compteur nbr de bit recu
-// << 1 | 1 = add 1 
-// << 1 = add 0
+ * bit_index compteur de bit recu
+ * << 1 | 1 = add 1
+ * << 1 = add 0
+ */
 void	add_bit(int signum, unsigned char *current_char, int *bit_index)
 {
 	if (signum == SIGUSR1)
@@ -53,6 +38,11 @@ void	add_bit(int signum, unsigned char *current_char, int *bit_index)
 	(*bit_index)++;
 }
 
+/*
+ * Current = "actuel";
+ * bit_index=8 = 1 octet = Caractere complet;
+ * malloc size+2 = stock current_c et \0;
+ */
 void	add_in_string(unsigned char current_char, int *size, int signum)
 {
 	char	*new_string;
@@ -71,6 +61,15 @@ void	add_in_string(unsigned char current_char, int *size, int signum)
 	(*size)++;
 }
 
+/*
+ *Structure SIGACTION
+ * sa_handler : ft a exe qd le signal arrive
+ * sa_mask : bloque les signaux temporairement pendant l'exe
+ * sa_flag : optionnel, modif cpt par defaut du signal =
+ * SA_RESTART(reprendre une fonction interrompue;
+ * SA_SIGINFO(info supplementaire sur le signal);
+ * Main: initialise à sigemptyset = evite erreur valgrind.
+*/
 void	handle_signal(int signum)
 {
 	static int				size = 0;
@@ -107,31 +106,18 @@ void	free_memory(int signum)
 	exit (0);
 }
 
-/* 
-difference sleep/usleep
--temps et sleep renvoie 0 usleep rien
-sleep(seconde) = endort le processus temps donne 
-usleep = (microseconde)*/
-
 /*
 	* Le processus possède un id unique = PID
 	* pid_t getpid() = id du processus
 	* pid_t getpgrp() = id groupe de processus
 	* pid_t getppid() = id du père du processus
-*/
-
-/*
-	* struct sigaction (directement dans signal.h);
-	* conventionnement on la defini en sa;
-*/
-
-/*
-	* Utilisation d'une boucle infini pour que le serveur ne se ferme pas"
+	* Boucle infini : permet de laisser le serveur ouvert;
 */
 int	main(void)
 {
 	struct sigaction	sa;
 	pid_t				pid;
+	int					i;
 
 	pid = getpid();
 	ft_printf("PID serveur : %d\n", pid);
@@ -142,7 +128,8 @@ int	main(void)
 	sigaction(SIGUSR2, &sa, NULL);
 	sa.sa_handler = free_memory;
 	sigaction(SIGINT, &sa, NULL);
-	while (1)
-		pause();
+	i = 1;
+	while (++i)
+		i--;
 	return (0);
 }
