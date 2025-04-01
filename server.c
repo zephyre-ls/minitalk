@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:14:28 by lduflot           #+#    #+#             */
-/*   Updated: 2025/04/01 12:26:53 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/04/01 13:24:34 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,9 @@ void	add_in_string(unsigned char current_char, int *size, int signum)
 
 void	handle_signal(int signum)
 {
-	static int			size = 0;
-	static int			bit_index = 0;
-	static unsigned char		current_char = 0;
+	static int				size = 0;
+	static int				bit_index = 0;
+	static unsigned char	current_char = 0;
 
 	add_bit(signum, &current_char, &bit_index);
 	if (bit_index == 8)
