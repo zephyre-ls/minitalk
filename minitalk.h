@@ -6,7 +6,7 @@
 /*   By: lduflot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 00:11:05 by lduflot           #+#    #+#             */
-/*   Updated: 2025/03/31 20:23:05 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/04/01 09:53:51 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	translate_ascii_bit(int pid, unsigned char c);
 
 //server
 void	handle_signal(int signum);
+void	free_memory(int signum);
 //void	mask_signal(?);
 
 //utils

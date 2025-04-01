@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:13:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/04/01 01:24:00 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/04/01 09:42:49 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	translate_ascii_bit(int pid, unsigned char c)
 			kill(pid, SIGUSR1);
 		else
 			kill(pid, SIGUSR2);
-		usleep(400);
+		usleep(100);
 	}
 }
 

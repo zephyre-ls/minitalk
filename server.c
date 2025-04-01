@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:14:28 by lduflot           #+#    #+#             */
-/*   Updated: 2025/04/01 09:12:07 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/04/01 09:57:00 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,10 @@
 // Ecrire signal non conventionnel car nom de la fonction signal, peut porter a confusion
 
 //Current = "actuel" donc = char acnnuel
+
+static char	*string = NULL;
 void	handle_signal(int signum)
 {
-	static char	*string = NULL;
 	static int	size = 0;
 	static unsigned char	current_char = 0; //stock le char bit par bit
 	static int	bit_index = 0; // compte nbr de bit reçu
@@ -54,7 +55,6 @@ void	handle_signal(int signum)
 	{
 		if (current_char == '\0')
 		{
-		//	string[size] = '\0';
 			ft_printf("%s\n", string);
 			free(string);
 			string = NULL;
@@ -64,7 +64,11 @@ void	handle_signal(int signum)
 		{
 			new_string = malloc(size + 2); //permet de stock current_char et \0
 			if (!new_string)
+			{
+				free(string);
+				string = NULL;
 				return ;
+			}
 			if (string)
 			{
 				ft_memcpy(new_string, string, size);
@@ -80,15 +84,26 @@ void	handle_signal(int signum)
 	}
 }
 
+void	free_memory(int signum)
+{
+	(void)signum;
+
+	if(string)
+	{
+		free(string);
+		string = NULL;
+	}
+	exit (0);
+}
+
 //
 /*void	mask_signal(int signum)
 {
 }*/
 
 
-/*kill PID = quand on quitte le processus avec CTRL + C. 
-
-	difference sleep/usleep
+/* 
+difference sleep/usleep
 -temps et sleep renvoie 0 usleep rien
 sleep(seconde) = endort le processus temps donne 
 usleep = (microseconde)*/
@@ -113,16 +128,17 @@ int	main(void)
 {
 	struct sigaction sa;
 	pid_t pid;
-	int i = 1;
 
 	pid = getpid();
 	ft_printf("PID serveur : %d\n", pid);
 	sa.sa_handler = handle_signal;
-//	sa.sa_mask = mask_signal;
+	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
-	while(++i)
-		i--;
+	sa.sa_handler = free_memory;
+	sigaction(SIGINT, &sa, NULL);
+	while(1)
+		pause();
 	return(0);
 }
