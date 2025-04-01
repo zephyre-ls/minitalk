@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:13:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/03/31 23:02:32 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/04/01 01:24:00 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,15 @@ void	translate_ascii_bit(int pid, unsigned char c)
 	int	i;
 	int	bit;
 
-	i = 8; 	
+	i = 8;
 	while(i > 0)
 	{
 		i--; 
-		bit = c >> i;
+		bit = c >> i & 1;
 		if (bit == 1)
-			kill(pid, SIGUSR2);
-		else
 			kill(pid, SIGUSR1);
+		else
+			kill(pid, SIGUSR2);
 		usleep(400);
 	}
 }
@@ -76,7 +76,7 @@ void	send_string(int pid, char *str)
 
 int	main(int argc, char **argv)
 {
-	int	pid;
+	pid_t	pid;
 
 	if (argc == 3)
 	{
@@ -89,5 +89,6 @@ int	main(int argc, char **argv)
 		send_string(pid, argv[2]);
 	}
 	else
-		ft_printf("%s Erreur/ PID du serveur attendu + String \n");
+		ft_printf("%s", "Erreur/ PID du serveur attendu + String \n");
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:14:28 by lduflot           #+#    #+#             */
-/*   Updated: 2025/04/01 00:47:46 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/04/01 01:33:01 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 // Signum = numero du signal
 // Ecrire signal non conventionnel car nom de la fonction signal, peut porter a confusion
 
+//Current = "actuel" donc = char acnnuel
 void	handle_signal(int signum)
 {
 	static char	*string = NULL;
@@ -43,15 +44,17 @@ void	handle_signal(int signum)
 	char	*new_string;
 	
 	if (signum == SIGUSR1)
-		current_char = (current_char << 1) | 1;
+		current_char = (current_char << 1) | 1; //add 1 
 	else
-		current_char = (current_char << 1);
+		current_char = (current_char << 1); // add 0
 	bit_index++;
-	if (bit_index == 8) 
+
+	//si reception de 8 bits = caractere complet
+	if (bit_index == 8)
 	{
-		if (current_char)
+		if (current_char == '\0')
 		{
-			string[size] = '\0';
+		//	string[size] = '\0';
 			ft_printf("%s\n", string);
 			free(string);
 			string = NULL;
@@ -59,7 +62,7 @@ void	handle_signal(int signum)
 		}
 		else
 		{
-			new_string = malloc(size + 2);
+			new_string = malloc(size + 2); //permet de stock current_char et \0
 			if (!new_string)
 				return ;
 			if (string)
@@ -75,8 +78,6 @@ void	handle_signal(int signum)
 		bit_index = 0; 
 		current_char = 0;
 	}
-	else
-		current_char <<=1;
 }
 
 //
@@ -110,15 +111,17 @@ usleep = (microseconde)*/
 */
 int	main(void)
 {
-	pid_t pid = getpid();
-	ft_printf("PID serveur : %d", pid);
 	struct sigaction sa;
+	pid_t pid;
+
+	pid = get(pid);
+	ft_printf("PID serveur : %d\n", pid);
 	sa.sa_handler = handle_signal;
 //	sa.sa_mask = mask_signal;
 	sa.sa_flags = 0;
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
 	while(1)
-		sleep(1);
+		pause(1);
 	return(0);
 }
