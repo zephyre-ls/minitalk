@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:13:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/04/01 14:06:32 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/04/01 14:11:36 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
  * usleep (choix de usleep car sleep=seconde, usleep=microseconde);
  * usleep permet d'éviter d'envoyer les signaux trop rapidement;
  * permet au serveur de traiter chaque bit sans les oublier.
+ * Kill = fonct° qui permet de send un signal a un processus avec PID
  */
 void	translate_ascii_bit(int pid, unsigned char c)
 {
@@ -67,6 +68,11 @@ void	send_string(int pid, char *str)
 	translate_ascii_bit(pid, str[i]);
 }
 
+/*
+	* 0 = signal sans effet
+	* Permet de voir si le process existe et si on peut
+	* lui envoyer un signal.
+	*/
 void	check_pid(pid_t pid)
 {
 	if (kill(pid, 0) == -1)
