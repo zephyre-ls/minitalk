@@ -6,7 +6,7 @@
 /*   By: lduflot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 00:11:05 by lduflot           #+#    #+#             */
-/*   Updated: 2025/04/01 12:26:31 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/04/01 14:04:51 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 //client
 void	send_string(int pid, char *str);
 void	translate_ascii_bit(int pid, unsigned char c);
+void	check_pid(pid_t pid);
 
 //server
 void	handle_signal(int signum);

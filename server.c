@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:14:28 by lduflot           #+#    #+#             */
-/*   Updated: 2025/04/01 13:57:23 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/04/01 14:01:14 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,9 @@ void	free_memory(int signum)
 	* pid_t getpgrp() = id groupe de processus
 	* pid_t getppid() = id du père du processus
 	* Boucle infini : permet de laisser le serveur ouvert;
+	* Utilisation de sigaction plutot que signal;
+  * Signal() = old, + simple, mais cpt varie selon syteme
+  * Sigaction = plus de controle sur la gestion des signaux graced à sa struct.
 */
 int	main(void)
 {

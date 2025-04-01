@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:13:49 by lduflot           #+#    #+#             */
-/*   Updated: 2025/04/01 11:44:54 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/04/01 14:06:32 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,7 @@
 	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /*
- * Utilisation de sigaction plutot que signal;
- * Le man le dit pourquoi?
- * Signal() = old, + simple, mais cpt varie selon syteme
- * sigaction = plus de controle sur la gestion des signaux graced a sa struct
- */
-
-/*
- * Send_signal;
+ * Send_signal =
  * i = compteur qui va parcourir les 8 bits d'1 octet;
  * Boucle = Decremente pour parcourir les bits du plus significatif
  * au plus faible
@@ -40,11 +33,9 @@
  * a la pos du bit de poids faible
  * %2==0 = savoir si bit de poids faible = 0 ou 1;
  * usleep (choix de usleep car sleep=seconde, usleep=microseconde);
- * usleep permet d'éviter d'envoyer les signaux trop rapidement; 
+ * usleep permet d'éviter d'envoyer les signaux trop rapidement;
  * permet au serveur de traiter chaque bit sans les oublier.
- * 420 microseconde = 0,00042seconde (pe trop court);
  */
-
 void	translate_ascii_bit(int pid, unsigned char c)
 {
 	int	i;
@@ -76,6 +67,15 @@ void	send_string(int pid, char *str)
 	translate_ascii_bit(pid, str[i]);
 }
 
+void	check_pid(pid_t pid)
+{
+	if (kill(pid, 0) == -1)
+	{
+		ft_printf("%s Erreur/ Pid invalid\n");
+		exit (EXIT_FAILURE);
+	}
+}
+
 int	main(int argc, char **argv)
 {
 	pid_t	pid;
@@ -83,6 +83,7 @@ int	main(int argc, char **argv)
 	if (argc == 3)
 	{
 		pid = ft_atoi(argv[1]);
+		check_pid(pid);
 		if (!pid)
 		{
 			ft_printf("%s Erreur/ PID invalid\n");
@@ -91,6 +92,6 @@ int	main(int argc, char **argv)
 		send_string(pid, argv[2]);
 	}
 	else
-		ft_printf("%s", "Erreur/ PID du serveur attendu + String \n");
+		ft_printf("%s", "Erreur/ [PID] [message] \n");
 	return (0);
 }
