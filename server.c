@@ -6,7 +6,7 @@
 /*   By: lduflot <lduflot@student.42perpignan.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:14:28 by lduflot           #+#    #+#             */
-/*   Updated: 2025/04/01 01:33:01 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/04/01 09:12:07 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,15 +113,16 @@ int	main(void)
 {
 	struct sigaction sa;
 	pid_t pid;
+	int i = 1;
 
-	pid = get(pid);
+	pid = getpid();
 	ft_printf("PID serveur : %d\n", pid);
 	sa.sa_handler = handle_signal;
 //	sa.sa_mask = mask_signal;
 	sa.sa_flags = 0;
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
-	while(1)
-		pause(1);
+	while(++i)
+		i--;
 	return(0);
 }
